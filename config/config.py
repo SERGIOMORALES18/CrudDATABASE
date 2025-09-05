@@ -13,7 +13,7 @@ load_dotenv()
 
 # URI de conexión (MySQL primero, fallback SQLite)
 MYSQL_URI = os.getenv("MYSQL_URI")   # mysql+mysqlconnector://user:password@localhost:3306/tienda
-SQLITE_URI = "sqlite:///bands_local.db"
+SQLITE_URI = "sqlite:///tienda.db"
 
 def get_engine():
     """
@@ -34,7 +34,7 @@ def get_engine():
 engine = get_engine()
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
-# Base para los modelos
+# Base para los modelos (debe ser importada por los modelos)
 Base = declarative_base()
 
 def get_db_session():
