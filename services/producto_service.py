@@ -1,8 +1,5 @@
-from models.band_model import Producto
+from models.producto_model import Producto
 from config import get_db_session
-
-
-
 
 def crear_producto(data):
     session = get_db_session()
@@ -13,7 +10,7 @@ def crear_producto(data):
     )
     session.add(nuevo)
     session.commit()
-    session.refresh(nuevo)  # obtener el ID generado
+    session.refresh(nuevo)
     session.close()
     return nuevo.to_dict()
 
