@@ -1,5 +1,5 @@
 from models.producto_model import Producto
-from config import get_db_session
+from config.database import get_db_session
 
 def crear_producto(data):
     session = get_db_session()

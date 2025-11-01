@@ -1,5 +1,5 @@
-from repositories.user_repository import UserRepository
-from models.user_model import User
+from repositories.usuario_repository import UserRepository
+from models.usuario_model import User
 from werkzeug.security import generate_password_hash, check_password_hash
 import logging
 
@@ -28,9 +28,6 @@ class UsersService:
         return self.users_repository.get_user_by_id(user_id)
 
     def create_user(self, username: str, password: str, role: str = "cliente"):
-        """
-        Crea un nuevo usuario si el nombre de usuario no existe. Permite asignar rol.
-        """
         existing_user = self.users_repository.db.query(User).filter(User.username == username).first()
         if existing_user:
             logger.warning(f"El nombre de usuario ya existe: {username}")
@@ -42,6 +39,8 @@ class UsersService:
 
     def update_user(self, user_id: int, username: str = None, password: str = None):
         logger.info(f"Updating user: {user_id}")
+        if password:
+            password = generate_password_hash(password)
         return self.users_repository.update_user(user_id, username, password)
 
     def delete_user(self, user_id: int):
