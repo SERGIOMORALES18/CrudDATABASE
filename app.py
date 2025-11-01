@@ -26,8 +26,8 @@ app.config['JWT_HEADER_TYPE'] = JWT_HEADER_TYPE
 
 jwt = JWTManager(app)
 
-# Registrar blueprints
-# Registrar blueprints
+# Registrar blueprintss
+# Registrar blueprintss
 app.register_blueprint(usuarios_bp)
 app.register_blueprint(productos_bp)
 if auth_bp:
