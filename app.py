@@ -1,4 +1,28 @@
 
+import os
+import sys
+import site
+
+# If a local virtualenv `.venv` exists in the project, add its site-packages
+# to sys.path so the user can run `python app.py` without activating the venv.
+# This is a convenience shim (Windows and POSIX paths are handled).
+try:
+    PROJECT_ROOT = os.path.dirname(__file__)
+    venv_paths = []
+    # Windows venv layout
+    venv_paths.append(os.path.join(PROJECT_ROOT, '.venv', 'Lib', 'site-packages'))
+    # POSIX venv layout (include the current running python minor version)
+    pyver = f"python{sys.version_info.major}.{sys.version_info.minor}"
+    venv_paths.append(os.path.join(PROJECT_ROOT, '.venv', 'lib', pyver, 'site-packages'))
+    for p in venv_paths:
+        if os.path.isdir(p) and p not in sys.path:
+            site.addsitedir(p)
+            # ensure it's early in sys.path
+            sys.path.insert(0, p)
+            break
+except Exception:
+    # If anything goes wrong, continue and let normal imports raise helpful errors
+    pass
 
 from flask import Flask
 from config.database import Base, engine
@@ -24,9 +48,21 @@ app.config['JWT_ACCESS_TOKEN_EXPIRES'] = JWT_ACCESS_TOKEN_EXPIRES
 app.config['JWT_HEADER_NAME'] = JWT_HEADER_NAME
 app.config['JWT_HEADER_TYPE'] = JWT_HEADER_TYPE
 
+# Asegurar headers CORS y métodos permitidos en todas las respuestas
+@app.after_request
+def after_request(response):
+    response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization')
+    response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS')
+    return response
+
+
 
 jwt = JWTManager(app)
-CORS(app, supports_credentials=True, resources={r"/*": {"origins": "*"}}, allow_headers=["Authorization", "Content-Type"])
+CORS(app,
+    supports_credentials=True,
+    resources={r"/*": {"origins": "*"}},
+    allow_headers=["Authorization", "Content-Type"],
+    expose_headers=["Authorization"])
 
 # Registrar blueprints
 app.register_blueprint(usuarios_bp)

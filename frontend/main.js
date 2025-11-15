@@ -135,7 +135,9 @@ function register() {
 function loadUsers() {
     render(navBar() + '<h2>Usuarios</h2><div id="users-list">Cargando...</div>');
     fetch(`${API_URL}/users`, {
-        headers: { 'Authorization': `Bearer ${jwt}` }
+        headers: { 'Authorization': `Bearer ${jwt}` },
+        mode: 'cors',
+        credentials: 'omit'
     })
     .then(r => r.json())
     .then(data => {
@@ -179,6 +181,8 @@ function createUser() {
     fetch(`${API_URL}/registry`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${jwt}` },
+        mode: 'cors',
+        credentials: 'omit',
         body: JSON.stringify({ username, password, role })
     })
     .then(r => r.json())
@@ -198,6 +202,8 @@ function editUser(id, username) {
     fetch(`${API_URL}/users/${id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${jwt}` },
+        mode: 'cors',
+        credentials: 'omit',
         body: JSON.stringify({ username: newUsername, password: newPassword })
     })
     .then(r => r.json())
@@ -214,7 +220,9 @@ function deleteUser(id) {
     if (!confirm('¿Seguro que quieres eliminar este usuario?')) return;
     fetch(`${API_URL}/users/${id}`, {
         method: 'DELETE',
-        headers: { 'Authorization': `Bearer ${jwt}` }
+        headers: { 'Authorization': `Bearer ${jwt}` },
+        mode: 'cors',
+        credentials: 'omit'
     })
     .then(r => r.json())
     .then(data => {
@@ -233,7 +241,9 @@ function deleteUser(id) {
 function loadProductos() {
     render(navBar() + '<h2>Productos</h2><div id="productos-list">Cargando...</div>');
     fetch(`${API_URL}/productos`, {
-        headers: { 'Authorization': `Bearer ${jwt}` }
+        headers: { 'Authorization': `Bearer ${jwt}` },
+        mode: 'cors',
+        credentials: 'omit'
     })
     .then(r => r.json())
     .then(data => {
@@ -286,6 +296,8 @@ function createProducto() {
     fetch(`${API_URL}/productos`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${jwt}` },
+        mode: 'cors',
+        credentials: 'omit',
         body: JSON.stringify({ nombre, precio, stock })
     })
     .then(r => r.json())
@@ -309,6 +321,8 @@ function editProducto(id, nombre, precio, stock) {
     fetch(`${API_URL}/productos/${id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${jwt}` },
+        mode: 'cors',
+        credentials: 'omit',
         body: JSON.stringify({ nombre: newNombre, precio: parseFloat(newPrecio), stock: parseInt(newStock) })
     })
     .then(r => r.json())
@@ -325,7 +339,9 @@ function deleteProducto(id) {
     if (!confirm('¿Seguro que quieres eliminar este producto?')) return;
     fetch(`${API_URL}/productos/${id}`, {
         method: 'DELETE',
-        headers: { 'Authorization': `Bearer ${jwt}` }
+        headers: { 'Authorization': `Bearer ${jwt}` },
+        mode: 'cors',
+        credentials: 'omit'
     })
     .then(r => r.json())
     .then(data => {

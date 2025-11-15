@@ -9,6 +9,9 @@ productos_bp = Blueprint('productos', __name__)
 @productos_bp.route('/productos', methods=['GET'])
 @jwt_required()
 def list_productos():
+    from flask import request
+    import logging
+    logging.info(f"HEADERS RECIBIDOS EN /productos: {dict(request.headers)}")
     productos = obtener_productos()
     return jsonify(productos), 200
 

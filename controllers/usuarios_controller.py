@@ -50,7 +50,7 @@ def login():
         service = UsersService(db)
         user = service.authenticate_user(username, password)
         if user:
-            access_token = create_access_token(identity={'id': user.id, 'username': user.username}, additional_claims={'role': user.role})
+            access_token = create_access_token(identity=user.username, additional_claims={'role': user.role})
             logger.info(f"Usuario autenticado: {username}")
             return jsonify({'access_token': access_token}), 200, {'Content-Type': 'application/json; charset=utf-8'}
     logger.warning(f"Login fallido para usuario: {username}")
@@ -60,6 +60,8 @@ def login():
 @usuarios_bp.route('/users', methods=['GET'])
 @jwt_required()
 def get_users():
+    from flask import request
+    logger.info(f"HEADERS RECIBIDOS EN /users: {dict(request.headers)}")
     with get_db() as db:
         service = UsersService(db)
         users = service.get_all_users()
